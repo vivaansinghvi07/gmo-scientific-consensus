@@ -1,12 +1,13 @@
 import gpt4free
 import re
 import requests
+from pynterface import Ellipsis, smooth_print, Color
 from bs4 import BeautifulSoup
 from gpt4free import Provider
 
 PAGE_COUNT = 49
 SEARCH_TERM = "genetically modified organisms effects on the world"
-GET_SOUP = lambda url: BeautifulSoup(requests.get(url).html, "html.parser")
+GET_SOUP = lambda url: BeautifulSoup(requests.get(url).text, "html.parser")
 
 def get_articles():
 
@@ -15,19 +16,44 @@ def get_articles():
     These abstracts can later be read and evaluated.
     """
 
-    """ This part obtains the article id's to parse through, given a search term """
+    with open("abstracts.txt", "w") as f:
 
-    article_ids = []
-    search_url = f"https://pubmed.ncbi.nlm.nih.gov/?term={SEARCH_TERM.replace(' ', '%20')}&page="
+        """ This part obtains the article id's to parse through, given a search term """
 
-    # in case of errors near the end
-    try:
-        for page in range(1, PAGE_COUNT):
-            soup = GET_SOUP(f"{search_url}{page}")
-            for link in soup.find_all("a", {"class": "docsum-title"}):
-                article_ids.append(link.attrs["data-article-id"])
-    except: pass        
-        
+        # in case of errors near the end
+        try:        
+            with Ellipsis(message="Getting Article ID's"):
+
+                article_ids = []
+                search_url = f"https://pubmed.ncbi.nlm.nih.gov/?term={SEARCH_TERM.replace(' ', '%20')}&page="
+
+                for page in range(1, PAGE_COUNT):
+                    soup = GET_SOUP(f"{search_url}{page}")
+                    for link in soup.find_all("a", {"class": "docsum-title"}):
+                        article_ids.append(link.attrs["data-article-id"])
+                
+        except Exception as e: 
+            print(e)        
+
+        """ This part obtainas abstracts from the articles """
+
+        with Ellipsis(message="Getting Abstracts") as loader:
+
+            abstracts = []
+            article_url = "https://pubmed.ncbi.nlm.nih.gov/"
+
+            for id in article_ids:
+                soup = GET_SOUP(f"{article_url}{id}")
+                try: 
+                    abstract = soup.find("div", {"class": "abstract-content"}).text
+                    abstract = abstract.replace("\n", ' ')
+                    abstracts.append(abstract) 
+                except:
+                    loader.print_above(f"{Color.RED}Error {Color.RESET_COLOR}Article with ID {Color.BLUE}{id} {Color.RESET_COLOR}has no abstract.")
+
+        # write to file
+        f.writelines(abstracts)
+        smooth_print("Successfully saved abstracts.")
 
 def analyze_abstract(abstract):
 
