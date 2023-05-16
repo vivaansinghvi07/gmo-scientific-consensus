@@ -1,11 +1,24 @@
 import gpt4free
 import re
+import requests
+from bs4 import BeautifulSoup
 from gpt4free import Provider
+
+def get_articles():
+
+    # obtains page ids
+    article_ids = []
+    search_url = r"https://pubmed.ncbi.nlm.nih.gov/?term=genetically%20modified%20organisms%20effects%20on%20the%20world&page="
+    for page in range(1, 49):
+        html = requests.get(f"{search_url}{page}").text
+        soup = BeautifulSoup(html, "html.parser")
+        for link in soup.find_all("a", {"class": "docsum-title"}):
+            article_ids.append(link.attrs["data-article-id"])
+    
 
 def analyze_abstract(abstract):
 
     prompt = """Analyze the text to determine the effects of genetically modified organisms on the environment, the economy, and health. Your output should be in the following format: "environment: <response>, economy: <response>, health: <response>", where <response> can be 'G' for good, 'B' for bad, 'N' for neutral, or 'I' for not enough information."""
-
     response = "Unable to fetch the response, Please try again."
 
     # filter bad responses
@@ -25,5 +38,4 @@ def analyze_abstract(abstract):
     return {"environment": env, "economy": econ, "health": health}
 
 if __name__ == "__main__":
-    abstract = "2005 represents the tenth planting season since genetically modified (GM) crops were first grown in 1996. This milestone provides the opportunity to critically assess the impact this technology is having on global agriculture. This study examines specific global economic impacts on farm income and environmental impacts of the technology with respect to pesticide usage and greenhouse gas emissions for each of the countries where GM crops have been grown since 1996. The analysis shows that there have been substantial net economic benefits at the farm level amounting to a cumulative total of $27 billion. The technology has reduced pesticide spraying by 172 million kg and has reduced the environmental footprint associated with pesticide use by 14%. The technology has also significantly reduced the release of greenhouse gas emissions from agriculture, which is equivalent to removing five million cars from the roads."
-    print(analyze_abstract(abstract))
+    get_articles()
