@@ -8,6 +8,7 @@ from gpt4free import Provider
 PAGE_COUNT = 49
 SEARCH_TERM = "genetically modified organisms effects on the world"
 GET_SOUP = lambda url: BeautifulSoup(requests.get(url).text, "html.parser")
+PROGRESS_FREQUENCY = 8
 
 def get_articles():
 
@@ -42,14 +43,16 @@ def get_articles():
             abstracts = []
             article_url = "https://pubmed.ncbi.nlm.nih.gov/"
 
-            for id in article_ids:
+            for index, id in enumerate(article_ids, start=1):
                 soup = GET_SOUP(f"{article_url}{id}")
+                if index % PROGRESS_FREQUENCY == 0:
+                    loader.print_above(f"{Color.BLUE}{index} {Color.RESET_COLOR}abstracts read.")
                 try: 
                     abstract = soup.find("div", {"class": "abstract-content"}).text
                     abstract = abstract.replace("\n", ' ')
                     abstracts.append(abstract) 
                 except:
-                    loader.print_above(f"{Color.RED}Error {Color.RESET_COLOR}Article with ID {Color.BLUE}{id} {Color.RESET_COLOR}has no abstract.")
+                    loader.print_above(f"{Color.RED}ERROR: {Color.RESET_COLOR}Article with ID {Color.BLUE}{id} {Color.RESET_COLOR}has no abstract.")
 
         # write to file
         f.writelines(abstracts)
