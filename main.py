@@ -50,7 +50,7 @@ def get_articles():
                 try: 
                     abstract = soup.find("div", {"class": "abstract-content"}).text
                     abstract = abstract.replace("\n", ' ')
-                    abstracts.append(abstract) 
+                    abstracts.append(abstract+"\n") 
                 except:
                     loader.print_above(f"{Color.RED}ERROR: {Color.RESET_COLOR}Article with ID {Color.BLUE}{id} {Color.RESET_COLOR}has no abstract.")
 
