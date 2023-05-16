@@ -49,7 +49,7 @@ def get_articles():
                     loader.print_above(f"{Color.BLUE}{index} {Color.RESET_COLOR}abstracts read.")
                 try: 
                     abstract = soup.find("div", {"class": "abstract-content"}).text
-                    abstract = abstract.replace("\n", ' ')
+                    abstract = abstract.strip().replace("\n", ' ')      # remove trailing and sub spaces for newlines between
                     abstracts.append(abstract+"\n") 
                 except:
                     loader.print_above(f"{Color.RED}ERROR: {Color.RESET_COLOR}Article with ID {Color.BLUE}{id} {Color.RESET_COLOR}has no abstract.")
