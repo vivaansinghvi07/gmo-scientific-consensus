@@ -1,5 +1,6 @@
-gpt4free==1.0.2
+g4f==0.0.1.4
 bs4==0.0.1
 matplotlib==3.7.1
 ipykernel==6.23.1
-pynterface==0.1.1
+pynterface==0.2.2
+js2py==0.74
