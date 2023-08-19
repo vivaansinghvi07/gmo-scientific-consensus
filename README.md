@@ -31,10 +31,21 @@ for bad, 'N' for neutral, or 'I' for not enough information.
 
 Then, by using regex to acquire the AI's ratings, I could repeat this process for many abstracts to acquire my data.
 
-# Results
+## Results
 
-Due to the limited rate I could make requests at, I could only analyze around the first 40 abstracts. If I find a more reliable AI model in the future, I will analyze every abstract. However, with this 40, the result is shown here:
+The result after analyzing all 469 articles is below:
 
 ![Results](result.png)
 
-It is well regarded that the economy is positively affected by GMOs, while the environment tends to be negatively affected, with some positive. Moreover, health is largely neutral but there are some scientists which claim that GMOs affect health negatively.
+The following conclusions can be made about these scientists' opinions:
+- The economy is nearly unanimously regarded to be positively or not affected by GMOs
+- The environment is both positively and negative affected by GMOs about equally.
+- Health is, for the most part, positively or not affected by GMOs, but there are some articles that state the contrary.
+
+## Future Analyses
+
+This program can be easily modified to analyze any other topics' effects on several factors, by simply changing the factors.
+
+## License
+
+This software is released under the MIT License.
