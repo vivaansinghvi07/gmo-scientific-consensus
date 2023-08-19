@@ -9,18 +9,19 @@ Therefore, by acquiring abstracts (summaries) of scientific articles pertaining 
 The requirements to run this project are in the `requirements.txt` file, the contents of which are shown below:
 
 ```
-gpt4free==1.0.2
+g4f==0.0.1.4
 bs4==0.0.1
 matplotlib==3.7.1
 ipykernel==6.23.1
-pynterface==0.1.1
+pynterface==0.2.2
+js2py==0.74
 ```
 
 ## Method
 
 To acquire the articles, I used [PubMed](https://pubmed.ncbi.nlm.nih.gov), using the search term `"genetically modified organisms effects on the world"`. It was worded this way in order to encapsulate environmental and economic effects as well as health effects. I took all the pages that were available and then found their abstracts using web scraping. The abstracts are stored in the `abstracts.txt` file, where each line represents one abstract.
 
-Then, I used [`gpt4free`](https://github.com/xtekky/gpt4free)'s `Provider.You` model in order to analyze my texts. The prompt used is here:
+Then, I used [`gpt4free`](https://github.com/xtekky/gpt4free)'s `Provider.DeepAI` model in order to analyze my texts. The prompt used is here:
 
 ```
 Analyze the text to determine the effects of genetically modified organisms on the environment,
